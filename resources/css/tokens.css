@@ -1,0 +1,287 @@
+/* =========================================================================
+   tokens.css — المصدر الوحيد لكل ألوان ومسافات وظلال المشروع
+   المرجع: PROJECT_SPEC.md §13 (نظام التصميم والهوية)
+   الهوية مستخرجة من xtremedsa.com — ملزمة حرفيًا.
+
+   ⛔ ممنوع كتابة أي لون أو ظل أو نصف قطر خارج هذا الملف.
+   ⛔ ممنوع: بنفسجي، نيون، تدرّجات متعددة الألوان، dark mode في v1.
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   1) Tailwind 4 theme — بيولّد الـ utilities (bg-brand, text-ink, ...)
+   ------------------------------------------------------------------------- */
+@theme {
+    /* --- Brand: تركواز اكستريم --- */
+    --color-brand: #029a8e;
+    --color-brand-700: #017a70;
+    --color-brand-600: #028a7f;
+    --color-brand-100: #d6f0ed;
+    --color-brand-50: #eff9f8;
+
+    /* --- Ink: كحلي ورمادي داكن --- */
+    --color-ink: #243858; /* العناوين */
+    --color-ink-900: #263238; /* نص قوي */
+    --color-ink-700: #3d4a5c;
+
+    /* --- Muted: رمادي النصوص --- */
+    --color-muted: #808291;
+    --color-muted-2: #878f9d;
+    --color-muted-3: #697285;
+
+    /* --- Surfaces --- */
+    --color-bg: #ffffff;
+    --color-surface-2: #f6f6f6; /* شرائط الأقسام */
+    --color-surface-3: #f0f0f0; /* خلفيات ثانوية */
+    --color-line: #e6e8ec; /* الحدود */
+    --color-line-strong: #d6d9df;
+
+    /* --- Accent: للشارات فقط، ممنوع كزر أساسي --- */
+    --color-accent: #ffd54f;
+    --color-accent-ink: #5a4500;
+
+    /* --- Semantic --- */
+    --color-ok: #1e9e6a;
+    --color-ok-bg: #e8f6f0;
+    --color-warn: #e8a33d;
+    --color-warn-bg: #fdf3e3;
+    --color-danger: #d64545;
+    --color-danger-bg: #fcecec;
+    --color-info: #5b7bfb;
+    --color-info-bg: #eef2ff;
+    --color-whatsapp: #25d366;
+
+    /* --- الخطوط --- */
+    --font-sans: 'Tajawal', 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+
+    /* --- نصف القطر --- */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+
+    /* --- الظلال: ناعمة جدًا، ممنوع ظلال ملوّنة --- */
+    --shadow-s1:
+        0 1px 2px rgb(16 24 40 / 0.04), 0 1px 3px rgb(16 24 40 / 0.06);
+    --shadow-s2: 0 4px 12px rgb(16 24 40 / 0.06);
+    --shadow-s3: 0 12px 28px rgb(16 24 40 / 0.08);
+
+    /* --- سلّم المسافات: أساس 4px (§13) --- */
+    --spacing: 4px;
+
+    /* --- عرض الحاوية --- */
+    --container-page: 1200px;
+
+    /* --- السلّم الطباعي (§13.2) --- */
+    --text-price-lg: 48px;
+    --text-price-lg--line-height: 1.1;
+    --text-price-md: 40px;
+    --text-price-md--line-height: 1.1;
+    --text-price-sm: 20px;
+    --text-price-sm--line-height: 1.2;
+}
+
+/* -------------------------------------------------------------------------
+   2) أسماء التوكنز كما وردت حرفيًا في PROJECT_SPEC.md §13.1
+      (للاستخدام المباشر في CSS العادي وفي قوالب الطباعة)
+   ------------------------------------------------------------------------- */
+:root {
+    --brand: var(--color-brand);
+    --brand-600: var(--color-brand-600);
+    --brand-700: var(--color-brand-700);
+    --brand-100: var(--color-brand-100);
+    --brand-50: var(--color-brand-50);
+    --brand-gradient: linear-gradient(
+        to left,
+        #029a8e,
+        rgb(2 154 142 / 0.6)
+    );
+
+    --ink: var(--color-ink);
+    --ink-900: var(--color-ink-900);
+    --ink-700: var(--color-ink-700);
+
+    --muted: var(--color-muted);
+    --muted-2: var(--color-muted-2);
+    --muted-3: var(--color-muted-3);
+
+    --bg: var(--color-bg);
+    --surface-2: var(--color-surface-2);
+    --surface-3: var(--color-surface-3);
+    --border: var(--color-line);
+    --border-strong: var(--color-line-strong);
+
+    --accent: var(--color-accent);
+    --accent-ink: var(--color-accent-ink);
+
+    --ok: var(--color-ok);
+    --ok-bg: var(--color-ok-bg);
+    --warn: var(--color-warn);
+    --warn-bg: var(--color-warn-bg);
+    --danger: var(--color-danger);
+    --danger-bg: var(--color-danger-bg);
+    --info: var(--color-info);
+    --info-bg: var(--color-info-bg);
+    --whatsapp: var(--color-whatsapp);
+
+    --r-sm: 8px;
+    --r-md: 12px;
+    --r-lg: 16px;
+    --r-xl: 24px;
+    --r-pill: 999px;
+
+    --sh-1: var(--shadow-s1);
+    --sh-2: var(--shadow-s2);
+    --sh-3: var(--shadow-s3);
+
+    --s-1: 4px;
+    --s-2: 8px;
+    --s-3: 12px;
+    --s-4: 16px;
+    --s-5: 20px;
+    --s-6: 24px;
+    --s-8: 32px;
+    --s-10: 40px;
+    --s-12: 48px;
+    --s-16: 64px;
+
+    --container: 1200px;
+}
+
+/* -------------------------------------------------------------------------
+   3) خط Tajawal — self-hosted (§13.2)
+      الأوزان المسموح بها: 400 / 500 / 700 فقط.
+   ------------------------------------------------------------------------- */
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/tajawal/tajawal-400-arabic.woff2') format('woff2');
+    unicode-range: U+0600-06FF, U+0750-077F, U+0870-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC7, U+10EC9-10EEE, U+10EF0-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1;
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/tajawal/tajawal-400-latin.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/fonts/tajawal/tajawal-500-arabic.woff2') format('woff2');
+    unicode-range: U+0600-06FF, U+0750-077F, U+0870-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC7, U+10EC9-10EEE, U+10EF0-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1;
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/fonts/tajawal/tajawal-500-latin.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/tajawal/tajawal-700-arabic.woff2') format('woff2');
+    unicode-range: U+0600-06FF, U+0750-077F, U+0870-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC7, U+10EC9-10EEE, U+10EF0-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1;
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/tajawal/tajawal-700-latin.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* -------------------------------------------------------------------------
+   4) الأساسيات: RTL + أرقام جدولية + منع التمرير الأفقي
+   ------------------------------------------------------------------------- */
+@layer base {
+    html {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+
+    body {
+        background-color: var(--bg);
+        color: var(--ink-900);
+        font-family: var(--font-sans);
+        font-size: 16px;
+        line-height: 1.7;
+        /* ممنوع تمرير أفقي على أي مقاس (§29.1) */
+        overflow-x: hidden;
+    }
+
+    /* كل الأسعار والجداول بأرقام ثابتة العرض (§13.2) */
+    .tnum,
+    table,
+    [data-price] {
+        font-variant-numeric: tabular-nums;
+        font-feature-settings: 'tnum' 1;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+        color: var(--ink);
+        line-height: 1.4;
+        text-wrap: balance;
+    }
+
+    /* حلقة التركيز موحّدة في كل المشروع */
+    :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+        outline: 2px solid var(--brand);
+        outline-offset: 2px;
+        border-radius: var(--r-sm);
+    }
+
+    /* احترام تفضيل تقليل الحركة */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+}
+
+/* -------------------------------------------------------------------------
+   5) أدوات صغيرة متكررة
+   ------------------------------------------------------------------------- */
+@utility container-page {
+    width: 100%;
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: 16px; /* gutter 16px على الموبايل (§13.6) */
+}
+
+/* عنوان شبح باهت خلف عناوين الأقسام — توقيع بصري من xtremedsa (§13.6) */
+@utility watermark {
+    position: absolute;
+    inset-block-start: -0.35em;
+    inset-inline-start: 0;
+    z-index: 0;
+    color: var(--surface-3);
+    font-size: clamp(48px, 10vw, 120px);
+    font-weight: 700;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+}
