@@ -4,6 +4,14 @@
 **[PROJECT_SPEC.md](PROJECT_SPEC.md)** هو المرجع الوحيد للمشروع. اقرأه بالكامل قبل أي تاسك.
 أي تعارض بين الكود والوثيقة → **الوثيقة هي الصح**. لو الكود أصح، عدّل الوثيقة الأول ثم الكود.
 
+**[SRS.md](SRS.md)** — الوثيقة التقنية: المعمارية، توقيعات السيرفسات، تدفقات التنفيذ، وتقسيم المهام بالساعات. اقرأها قبل ما تبدأ أي مرحلة جديدة.
+
+```
+PROJECT_SPEC.md  →  إيه اللي هنعمله (المرجع النهائي عند أي خلاف)
+SRS.md           →  هنعمله إزاي، وهياخد قد إيه
+CLAUDE.md        →  القواعد والخطوط الحمراء وأوامر البيئة (الملف ده)
+```
+
 **جذر المشروع:** `C:\laraenv\www\priceprivate`
 **التاسكات:** ClickUp — فولدر «السعر مش ع الخاص» (12 لست P0→P11، 85 تاسك)
 https://app.clickup.com/9012450566/v/f/1500460000003615
@@ -34,7 +42,7 @@ https://app.clickup.com/9012450566/v/f/1500460000003615
 - ❌ تصميم «شكله AI» — راجع القسم 13.6.
 
 ## الستاك
-Laravel 12 · **PHP 8.4** · MySQL 8 · Livewire 3 · Alpine · **Tailwind 4 (CSS-first `@theme`)** · Filament · Socialite · endroid/qr-code · **mPDF**
+Laravel 12.73 · **PHP 8.4.20** · MySQL 9.7 · **Livewire 4.4** · Alpine · **Tailwind 4 (CSS-first `@theme`)** · **Filament 5.12** · Socialite 5.33 · endroid/qr-code 6.1 · **mPDF 8.3**
 
 > ⚠️ Tailwind 4 مفيهاش `tailwind.config.js` — التوكنز كلها في `resources/css/tokens.css` داخل `@theme`.
 
