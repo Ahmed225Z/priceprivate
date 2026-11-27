@@ -72,8 +72,12 @@ class MerchantResource extends AdminResource
                     ->label('دخول كتاجر')
                     ->icon('heroicon-o-eye')
                     ->requiresConfirmation()
-                    ->url(fn (Merchant $r) => route('admin.impersonate.start', $r->user_id))
-                    ->visible(fn () => auth()->user()?->isAdmin()),
+                    ->action(function (Merchant $record) {
+                        app(\App\Actions\Impersonation::class)->start(auth()->user(), $record->user);
+
+                        return redirect('/dashboard');
+                    })
+                    ->visible(fn () => auth()->user()?->isAdmin() && ! session()->has('impersonator_id')),
             ]);
     }
 

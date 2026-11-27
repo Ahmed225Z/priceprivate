@@ -101,6 +101,6 @@ Route::get('/{slug}/{category}', [MenuController::class, 'category'])
     ->name('menu.category');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/admin-tools/impersonate/{user}', [\App\Http\Controllers\Admin\ImpersonateController::class, 'start'])->name('admin.impersonate.start')->whereNumber('user');
+    Route::post('/admin-tools/impersonate/{user}', [\App\Http\Controllers\Admin\ImpersonateController::class, 'start'])->name('admin.impersonate.start')->whereNumber('user');
     Route::post('/admin-tools/impersonate-leave', [\App\Http\Controllers\Admin\ImpersonateController::class, 'leave'])->name('admin.impersonate.leave');
 });

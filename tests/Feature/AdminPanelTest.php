@@ -86,16 +86,47 @@ class AdminPanelTest extends TestCase
     }
 
     #[Test]
+    public function impersonation_rejects_get_guests_and_missing_csrf(): void
+    {
+        $m = Merchant::factory()->create();
+        $admin = $this->staff('admin');
+
+        $this->actingAs($admin)->get('/admin-tools/impersonate/'.$m->user_id)->assertStatus(405);
+        $this->post('/admin-tools/impersonate-leave')->assertForbidden(); // not impersonating
+
+        auth()->logout();
+        $this->post('/admin-tools/impersonate/'.$m->user_id)->assertRedirect('/login');
+
+        // Laravel skips the CSRF check while testing, so assert the routes sit behind it.
+        foreach (['admin.impersonate.start', 'admin.impersonate.leave'] as $name) {
+            $mw = app('router')->getRoutes()->getByName($name)->gatherMiddleware();
+            $this->assertContains('web', $mw);
+            $this->assertContains('auth', $mw);
+            $this->assertSame(['POST'], array_values(array_diff(app('router')->getRoutes()->getByName($name)->methods(), ['HEAD'])));
+        }
+    }
+
+    #[Test]
+    public function impersonation_from_the_admin_table_is_admin_only(): void
+    {
+        $m = Merchant::factory()->create();
+        $this->actingAs($this->staff('admin'));
+        \Livewire\Livewire::test(\App\Filament\Resources\Merchants\Pages\ManageMerchants::class)->callTableAction('impersonate', $m);
+        $this->assertAuthenticatedAs($m->user);
+        $this->assertDatabaseHas('activity_log', ['event' => 'impersonate.start']);
+    }
+
+    #[Test]
     public function impersonation_is_admin_only_logged_and_shows_a_bar(): void
     {
         $m = Merchant::factory()->create();
         $other = Merchant::factory()->create();
         $admin = $this->staff('admin');
 
-        $this->actingAs($other->user)->get('/admin-tools/impersonate/'.$m->user_id)->assertForbidden();
-        $this->actingAs($this->staff('moderator'))->get('/admin-tools/impersonate/'.$m->user_id)->assertForbidden();
+        $this->actingAs($other->user)->post('/admin-tools/impersonate/'.$m->user_id)->assertForbidden();
+        $this->actingAs($this->staff('moderator'))->post('/admin-tools/impersonate/'.$m->user_id)->assertForbidden();
 
-        $this->actingAs($admin)->get('/admin-tools/impersonate/'.$m->user_id)->assertRedirect('/dashboard');
+        $this->actingAs($admin)->post('/admin-tools/impersonate/'.$m->user_id)->assertRedirect('/dashboard');
         $this->assertAuthenticatedAs($m->user);
         $this->get('/dashboard')->assertOk()->assertSee('رجوع للأدمن');
         $this->assertDatabaseHas('activity_log', ['event' => 'impersonate.start', 'causer_id' => $admin->id]);
