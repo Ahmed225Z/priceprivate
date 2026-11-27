@@ -32,3 +32,6 @@ Set GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET for login, PAYMENT_MOCK_SECRET for t
 ## Round 8
 Added: invoice PDF (after paid webhook) + subscription page, product drag-sort (SortableJS from CDN, JS not run in a browser here), QR studio (preview, default target), print templates shelf_talker/table_stand/poster, robots.txt, sitemap.xml, noindex on hidden/state pages, security headers. 76 tests pass.
 Still not done: Filament admin (needs PHP intl), real Paymob/Fawry, confirmation email, phone QR scan, real Google login, MySQL, 3G test.
+
+## MySQL run
+Tests also run against MariaDB 10.11.9 (userspace, local port 3307): migrate:fresh --seed OK, 76/76 pass on both SQLite and MariaDB. Found and fixed one MySQL-only bug (products_count decrement below 0 on unsigned column). To repeat: set DB_CONNECTION=mysql DB_HOST DB_PORT DB_DATABASE DB_USERNAME env vars and run php artisan test. Not real MySQL 8, MariaDB is a close stand-in.

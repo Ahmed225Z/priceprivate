@@ -87,7 +87,7 @@ class ProductController extends Controller
         $this->authorize('delete', $product);
         $merchant = $product->merchant;
         $product->delete();
-        $merchant->decrement('products_count');
+        $merchant->update(['products_count' => \DB::raw('CASE WHEN products_count > 0 THEN products_count - 1 ELSE 0 END')]); // never below 0 (unsigned column on MySQL)
         $merchant->bumpCacheVersion();
 
         return back();
