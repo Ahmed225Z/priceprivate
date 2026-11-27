@@ -75,6 +75,7 @@ class StudioInvoiceSeoTest extends TestCase
     #[Test]
     public function paying_creates_an_invoice_pdf_only_the_owner_can_download(): void
     {
+        \Illuminate\Support\Facades\Mail::fake();
         Plan::factory()->free()->create();
         $pro = Plan::factory()->create();
         $m = Merchant::factory()->create();
@@ -85,6 +86,19 @@ class StudioInvoiceSeoTest extends TestCase
         $this->call('POST', '/payment/webhook/mock', [], [], [], [
             'HTTP_X_SIGNATURE' => \App\Services\Payments\MockGateway::sign($body), 'CONTENT_TYPE' => 'application/json',
         ], $body)->assertOk();
+
+        \Illuminate\Support\Facades\Mail::assertQueued(\App\Mail\PaymentConfirmed::class, fn ($m) => $m->hasTo($m->payment->merchant->user->email) && str_contains($m->envelope()->subject, 'INV-'));
+
+        $queued = \Illuminate\Support\Facades\Mail::queued(\App\Mail\PaymentConfirmed::class)->first();
+        $html = $queued->render();
+        $this->assertStringContainsString($m->store_name, $html);
+        $this->assertStringContainsString('INV-', $html);
+
+        // Same webhook delivered twice: still one email.
+        $this->call('POST', '/payment/webhook/mock', [], [], [], [
+            'HTTP_X_SIGNATURE' => \App\Services\Payments\MockGateway::sign($body), 'CONTENT_TYPE' => 'application/json',
+        ], $body)->assertOk();
+        \Illuminate\Support\Facades\Mail::assertQueuedCount(1);
 
         $inv = $pay->fresh()->invoice;
         $this->assertNotNull($inv);

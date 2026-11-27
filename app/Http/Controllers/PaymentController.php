@@ -70,7 +70,9 @@ class PaymentController extends Controller
 
         $payload = $gw->parseWebhook($request);
 
-        DB::transaction(function () use ($payload, $subs, $invoices) {
+        $confirmed = null;
+
+        DB::transaction(function () use ($payload, $subs, $invoices, &$confirmed) {
             $payment = Payment::where('gateway_order_id', $payload->orderId)->lockForUpdate()->first();
 
             if (! $payment || $payment->status === Payment::STATUS_PAID) {
@@ -91,8 +93,17 @@ class PaymentController extends Controller
             ])->save();
 
             $subs->activate($payment);
-            $invoices->generate($payment->refresh());
+            $invoice = $invoices->generate($payment->refresh());
+            $confirmed = [$payment, $invoice];
         });
+
+        if ($confirmed) {
+            try {
+                \Illuminate\Support\Facades\Mail::to($confirmed[0]->merchant->user->email)->queue(new \App\Mail\PaymentConfirmed(...$confirmed));
+            } catch (\Throwable $e) {
+                Log::error('payment confirmation email failed', ['payment' => $confirmed[0]->id, 'error' => $e->getMessage()]);
+            }
+        }
 
         return response('ok', 200);
     }
