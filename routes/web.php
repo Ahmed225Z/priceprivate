@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\QrImageController;
 use App\Http\Middleware\TrackScan;
 use Illuminate\Support\Facades\Route;
 
@@ -11,6 +12,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
+
+// 5) Public assets
+Route::get('/qr/{code}.{ext}', [QrImageController::class, 'show'])
+    ->where('code', '[A-HJ-NP-Za-hj-np-z2-9]{6}')
+    ->whereIn('ext', ['png', 'svg'])
+    ->name('qr.show');
 
 // 6) Direct product page, before the catch-all
 Route::get('/p/{code}', [ProductController::class, 'show'])
