@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Merchant\CategoryController;
+use App\Http\Controllers\Merchant\PrintController;
 use App\Http\Controllers\Merchant\ProductController as MerchantProductController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OnboardingController;
@@ -38,6 +39,8 @@ Route::middleware(['auth', 'merchant', 'onboarded'])->prefix('dashboard')->group
     Route::post('/products/prices', [MerchantProductController::class, 'updatePrices']);
     Route::post('/products/{product}/toggle', [MerchantProductController::class, 'toggle']);
     Route::delete('/products/{product}', [MerchantProductController::class, 'destroy']);
+
+    Route::post('/print', [PrintController::class, 'generate'])->middleware('throttle:10,60');
 
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::post('/categories', [CategoryController::class, 'store']);
