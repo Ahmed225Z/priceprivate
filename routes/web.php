@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\QrImageController;
 use App\Http\Middleware\TrackScan;
@@ -12,6 +15,22 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
+
+// 2) Auth
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::get('/auth/{provider}/redirect', [AuthController::class, 'redirect'])->whereIn('provider', ['google', 'facebook']);
+Route::get('/auth/{provider}/callback', [AuthController::class, 'callback'])->whereIn('provider', ['google', 'facebook']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/onboarding', [OnboardingController::class, 'show'])->name('onboarding');
+    Route::post('/onboarding', [OnboardingController::class, 'store']);
+});
+
+// 3) Merchant dashboard
+Route::middleware(['auth', 'merchant', 'onboarded'])->prefix('dashboard')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+});
 
 // 5) Public assets
 Route::get('/qr/{code}.{ext}', [QrImageController::class, 'show'])
