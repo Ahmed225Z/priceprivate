@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Merchant\CategoryController;
+use App\Http\Controllers\Merchant\ProductController as MerchantProductController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProductController;
@@ -30,6 +32,16 @@ Route::middleware('auth')->group(function () {
 // 3) Merchant dashboard
 Route::middleware(['auth', 'merchant', 'onboarded'])->prefix('dashboard')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/products', [MerchantProductController::class, 'index'])->name('dashboard.products');
+    Route::post('/products', [MerchantProductController::class, 'store']);
+    Route::post('/products/prices', [MerchantProductController::class, 'updatePrices']);
+    Route::post('/products/{product}/toggle', [MerchantProductController::class, 'toggle']);
+    Route::delete('/products/{product}', [MerchantProductController::class, 'destroy']);
+
+    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::post('/categories', [CategoryController::class, 'store']);
+    Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
 });
 
 // 5) Public assets
