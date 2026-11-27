@@ -12,7 +12,14 @@ class PageController extends Controller
 {
     public function home()
     {
-        return view('marketing.home', ['plans' => Plan::where('is_active', true)->orderBy('price')->get()]);
+        $qr = new \Endroid\QrCode\QrCode(data: url('/'), size: 220, margin: 0);
+        $svg = (new \Endroid\QrCode\Writer\SvgWriter)->write($qr)->getString();
+        $svg = preg_replace('/^<\?xml[^>]*\?>\s*/', '', $svg);
+
+        return view('marketing.home', [
+            'plans' => Plan::where('is_active', true)->orderBy('price')->get(),
+            'qrSvg' => $svg,
+        ]);
     }
 
     public function howItWorks()
@@ -62,5 +69,11 @@ class PageController extends Controller
         return view('marketing.examples', [
             'stores' => Merchant::query()->where('status', 'active')->where('products_count', '>=', 3)->orderByDesc('products_count')->limit(12)->get(),
         ]);
+    }
+
+    /** Component reference (SRS P1.5). Not indexed. */
+    public function styleguide()
+    {
+        return view('marketing.styleguide');
     }
 }

@@ -12,13 +12,29 @@
         </div>
         <p class="muted" style="margin-top:var(--s-3)">التسجيل بحساب جوجل في أقل من 3 دقايق.</p>
     </div>
-    <div class="phone" aria-label="مثال لصفحة منتج">
-        <div class="bar"></div>
-        <div class="muted">بقالة الأمانة</div>
-        <div class="name">زيت عباد الشمس 800 مل</div>
-        <div class="pr">185 <small>جنيه</small></div>
-        <span class="chip ok">متاح</span>
-        <p class="muted" style="margin-top:var(--s-3)">آخر تحديث للسعر: النهارده</p>
+    <div class="stage" aria-label="كود على الرف وصفحة السعر على الموبايل">
+        <div class="shelf-card">
+            <div class="muted">بقالة الأمانة</div>
+            <b>زيت عباد الشمس 800 مل</b>
+            <div class="qrbox">{!! $qrSvg !!}</div>
+            <div class="muted">امسح لتشوف السعر</div>
+        </div>
+        <div class="phone">
+            <div class="bar"></div>
+            <div class="muted">بقالة الأمانة</div>
+            <div class="name">زيت عباد الشمس 800 مل</div>
+            <div class="pr">185 <small>جنيه</small></div>
+            <span class="chip ok">متاح</span>
+            <p class="muted" style="margin-top:var(--s-3)">آخر تحديث للسعر: النهارده</p>
+        </div>
+    </div>
+</section>
+
+<section class="proof">
+    <div class="wrap-wide">
+        <div><b>من غير تطبيق</b><span>كاميرا الموبايل تكفي</span></div>
+        <div><b>من غير تسجيل</b><span>الزبون يفتح ويشوف</span></div>
+        <div><b>كود ثابت للأبد</b><span>غيّر السعر والورقة زي ما هي</span></div>
     </div>
 </section>
 

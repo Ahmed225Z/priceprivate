@@ -31,6 +31,7 @@ Route::get('/terms', [PageController::class, 'terms']);
 Route::get('/privacy', [PageController::class, 'privacy']);
 Route::get('/contact', [PageController::class, 'contact']);
 Route::get('/examples', [PageController::class, 'examples']);
+Route::get('/styleguide', [PageController::class, 'styleguide']);
 Route::get('/report', [PageController::class, 'report']);
 
 // 2) Auth

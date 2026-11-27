@@ -51,3 +51,8 @@ Funnel: step 3 = share_targets row written when a QR is created in the studio; s
 - Marketing: home with the SRS section order (hero with phone mock, problem bubbles, 3 steps, 6 features, before/after, plans from the plans table, FAQ, CTA), how-it-works, pricing, examples (real stores only, empty state otherwise), faq, contact (reads settings contact_whatsapp / contact_email), report info page, terms/privacy placeholders. Testimonials section is left out on purpose (SRS: no fake content).
 - Merchant: dashboard stats, price editor (grouped by category, search, changed highlight, sticky save-all, drag-sort per group), QR studio with live preview and colour pickers, print studio page for all 5 templates, categories and subscription on the new layout.
 Not done: Livewire QuickPriceEditor (the editor is a plain form with JS), /styleguide page, Lucide set is a handful of inline icons, legal texts (need client), real photos/mock for hero, Lighthouse/LCP measurement, 320px audit across every page.
+
+## Round 11
+- Marketing hero now shows a shelf label with a real QR (generated server side) next to a phone mock; added a proof strip.
+- Added /styleguide (noindex) with tokens and components.
+- Still not done: Lucide icon set, Livewire editor, full 320px audit, Lighthouse/LCP, legal texts, real photos, real payment gateways, phone scan, real Google login.
