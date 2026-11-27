@@ -99,3 +99,8 @@ Route::get('/{slug}/{category}', [MenuController::class, 'category'])
     ->where('slug', '[a-z0-9][a-z0-9-]{1,38}[a-z0-9]')
     ->middleware(TrackScan::class)
     ->name('menu.category');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/admin-tools/impersonate/{user}', [\App\Http\Controllers\Admin\ImpersonateController::class, 'start'])->name('admin.impersonate.start')->whereNumber('user');
+    Route::post('/admin-tools/impersonate-leave', [\App\Http\Controllers\Admin\ImpersonateController::class, 'leave'])->name('admin.impersonate.leave');
+});

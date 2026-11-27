@@ -30,6 +30,11 @@
     </style>
 </head>
 <body>
+    @if (session('impersonator_id'))
+        <form method="POST" action="{{ route('admin.impersonate.leave') }}" style="background:#b00020;color:#fff;padding:8px;text-align:center;position:sticky;top:0;z-index:99">
+            @csrf أنت داخل كتاجر ({{ auth()->user()?->name }}) <button style="margin-inline-start:8px">رجوع للأدمن</button>
+        </form>
+    @endif
 <div class="wrap">
     @if (session('notice'))<div class="notice">{{ session('notice') }}</div>@endif
     @yield('content')

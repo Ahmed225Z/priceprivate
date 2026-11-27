@@ -14,7 +14,7 @@ use Illuminate\Notifications\Notifiable;
  * PROJECT_SPEC.md §15.1 (users), §23 (الأدوار والصلاحيات)
  * الدخول بـ OAuth فقط (جوجل / فيسبوك) — مفيش كلمات مرور في v1 (§18).
  */
-class User extends Authenticatable
+class User extends Authenticatable implements \Filament\Models\Contracts\FilamentUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -51,6 +51,11 @@ class User extends Authenticatable
             'last_login_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function canAccessPanel(\Filament\Panel $panel): bool
+    {
+        return $this->isModerator();
     }
 
     public function merchant(): HasOne

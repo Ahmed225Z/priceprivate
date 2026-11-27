@@ -35,3 +35,11 @@ Still not done: Filament admin (needs PHP intl), real Paymob/Fawry, confirmation
 
 ## MySQL run
 Tests also run against MariaDB 10.11.9 (userspace, local port 3307): migrate:fresh --seed OK, 76/76 pass on both SQLite and MariaDB. Found and fixed one MySQL-only bug (products_count decrement below 0 on unsigned column). To repeat: set DB_CONNECTION=mysql DB_HOST DB_PORT DB_DATABASE DB_USERNAME env vars and run php artisan test. Not real MySQL 8, MariaDB is a close stand-in.
+
+## Round 9: Filament admin (/admin)
+Resources: Merchants (suspend/reactivate, edit, impersonate), Reports (reviewed/dismissed/hide content, moderators allowed), Payments (manual activation), Subscriptions, AdSlots, Plans, Settings, ActivityLog. Dashboard widgets: new merchants today, active, paying, revenue, scans today, % who updated a price in 7 days, completion funnel.
+Sign-in is the normal /login flow (EnsureStaff middleware gates /admin); no separate Filament login. Panel RTL comes from APP_LOCALE=ar (Filament 5.12 has no ->direction()).
+Impersonation: admin only, logged with the real admin as causer, red bar in the public layout with a leave button.
+Deploy: run `php artisan filament:assets` (published assets are not committed). Needs ext-intl.
+Tested on MariaDB with an intl PHP build: 81 pass. On a PHP without ext-intl the 4 admin-panel tests fail (Filament needs intl), the other 77 pass.
+Known gaps: funnel step 3 ("first code") counts share_targets, which the app does not write yet. Impersonate start is a GET link (admin only, logged).
