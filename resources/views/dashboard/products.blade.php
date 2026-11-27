@@ -24,11 +24,12 @@
     @endforeach
 
     <h2>منتج جديد</h2>
-    <form method="POST" action="{{ url('/dashboard/products') }}">
+    <form method="POST" action="{{ url('/dashboard/products') }}" enctype="multipart/form-data">
         @csrf
         <input name="name" placeholder="اسم المنتج" required style="width:100%;padding:10px;margin:4px 0">
         <input name="price" inputmode="decimal" placeholder="السعر" style="width:100%;padding:10px;margin:4px 0">
         <input name="unit" placeholder="الوحدة (كيلو، لتر...)" style="width:100%;padding:10px;margin:4px 0">
+        <input type="file" name="image" accept="image/*" style="margin:4px 0">
         <select name="category_id" style="width:100%;padding:10px;margin:4px 0">
             <option value="">بدون قسم</option>
             @foreach ($categories as $c)<option value="{{ $c->id }}">{{ $c->name }}</option>@endforeach

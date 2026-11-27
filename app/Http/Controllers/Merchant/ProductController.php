@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Merchant;
 use App\Actions\UpdateProductPrice;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Services\ImageProcessor;
 use App\Services\ProductLimitChecker;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class ProductController extends Controller
         ]);
     }
 
-    public function store(Request $request, ProductLimitChecker $limits, UpdateProductPrice $price): RedirectResponse
+    public function store(Request $request, ProductLimitChecker $limits, UpdateProductPrice $price, ImageProcessor $images): RedirectResponse
     {
         $m = $request->user()->merchant;
 
@@ -40,6 +41,7 @@ class ProductController extends Controller
             'price' => ['nullable', 'numeric', 'min:0', 'max:9999999999', 'decimal:0,2'],
             'unit' => ['nullable', 'string', 'max:20'],
             'short_description' => ['nullable', 'string', 'max:140'],
+            'image' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ]);
 
         $product = $m->products()->create([
@@ -47,6 +49,7 @@ class ProductController extends Controller
             'category_id' => $data['category_id'] ?? null,
             'unit' => $data['unit'] ?? null,
             'short_description' => $data['short_description'] ?? null,
+            'image_path' => $request->hasFile('image') ? $images->store($request->file('image'), 'products') : null,
             'is_visible' => true,
             'sort_order' => (int) $m->products()->max('sort_order') + 1,
             'currency' => 'EGP',
