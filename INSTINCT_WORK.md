@@ -43,3 +43,11 @@ Impersonation: admin only, logged with the real admin as causer, red bar in the 
 Deploy: run `php artisan filament:assets` (published assets are not committed). Needs ext-intl.
 Tested on MariaDB with an intl PHP build: 81 pass. On a PHP without ext-intl the 4 admin-panel tests fail (Filament needs intl), the other 77 pass.
 Funnel: step 3 = share_targets row written when a QR is created in the studio; step 4 = shared_at set by POST /dashboard/share (button on the dashboard).
+
+## Round 10: confirmation email + design system pass
+- Payment confirmation email (queued, invoice PDF attached), sent once per paid webhook.
+- components.css: button, card, field, chip, notice/toast, modal, accordion, table, empty state, skeleton. Tokens only. Vite build works (`npm install && npm run build`); public/build is not committed.
+- Layouts: marketing (header, mobile menu, footer, cookie banner), merchant (top bar, bottom nav), public pages on tokens.
+- Marketing: home with the SRS section order (hero with phone mock, problem bubbles, 3 steps, 6 features, before/after, plans from the plans table, FAQ, CTA), how-it-works, pricing, examples (real stores only, empty state otherwise), faq, contact (reads settings contact_whatsapp / contact_email), report info page, terms/privacy placeholders. Testimonials section is left out on purpose (SRS: no fake content).
+- Merchant: dashboard stats, price editor (grouped by category, search, changed highlight, sticky save-all, drag-sort per group), QR studio with live preview and colour pickers, print studio page for all 5 templates, categories and subscription on the new layout.
+Not done: Livewire QuickPriceEditor (the editor is a plain form with JS), /styleguide page, Lucide set is a handful of inline icons, legal texts (need client), real photos/mock for hero, Lighthouse/LCP measurement, 320px audit across every page.

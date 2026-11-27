@@ -1,4 +1,4 @@
-@extends('public.layout')
+@extends('layouts.merchant')
 @section('title', 'الاشتراك')
 @section('content')
     <h1>الاشتراك</h1>

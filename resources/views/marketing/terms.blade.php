@@ -1,6 +1,8 @@
 @extends('marketing.layout')
-@section('title', 'الشروط')
+@section('title', 'الشروط والأحكام')
 @section('body')
-    <h1>الشروط</h1>
-    <p class="muted">الصفحة دي لسه محتاجة النص النهائي من صاحب المشروع.</p>
+<section class="section"><div class="wrap-wide prose">
+    <h1>الشروط والأحكام</h1>
+    <div class="empty">النص القانوني النهائي مطلوب من صاحب المشروع قبل الإطلاق (SRS 7.8). الصفحة موجودة ومربوطة من الفوتر.</div>
+</div></section>
 @endsection

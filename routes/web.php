@@ -27,9 +27,11 @@ Route::get('/pricing', [PageController::class, 'pricing'])->name('pricing');
 Route::get('/faq', [PageController::class, 'faq']);
 Route::get('/robots.txt', [SeoController::class, 'robots']);
 Route::get('/sitemap.xml', [SeoController::class, 'sitemap']);
-Route::view('/terms', 'marketing.terms');
-Route::view('/privacy', 'marketing.privacy');
-Route::view('/contact', 'marketing.contact');
+Route::get('/terms', [PageController::class, 'terms']);
+Route::get('/privacy', [PageController::class, 'privacy']);
+Route::get('/contact', [PageController::class, 'contact']);
+Route::get('/examples', [PageController::class, 'examples']);
+Route::get('/report', [PageController::class, 'report']);
 
 // 2) Auth
 Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -60,6 +62,7 @@ Route::middleware(['auth', 'merchant', 'onboarded'])->prefix('dashboard')->group
     Route::post('/share', [QrStudioController::class, 'share']);
     Route::post('/products/reorder', [MerchantProductController::class, 'reorder']);
     Route::post('/subscription/upgrade', [PaymentController::class, 'upgrade']);
+    Route::get('/print', fn (\Illuminate\Http\Request $r) => view('dashboard.print', ['products' => $r->user()->merchant->products()->orderBy('sort_order')->get()]));
     Route::post('/print', [PrintController::class, 'generate'])->middleware('throttle:10,60');
 
     Route::get('/categories', [CategoryController::class, 'index']);

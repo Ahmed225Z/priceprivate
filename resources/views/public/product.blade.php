@@ -1,5 +1,5 @@
 @php
-    $brand = $merchant->brand_color ?: '#0f766e';
+    $brand = $merchant->brand_color ?: '#029a8e';
     [$fState, $fLabel] = \App\Support\PriceFormatter::freshness($product->price_updated_at);
     $wa = \App\Support\PriceFormatter::whatsappUrl($merchant->whatsapp, $product->name, $product->publicUrl());
 @endphp
@@ -8,6 +8,7 @@
 @section('robots', $showPrice ? 'index,follow' : 'noindex')
 @section('content')
     <header class="head">
+        <span class="avatar" aria-hidden="true">{{ mb_substr($merchant->store_name, 0, 1) }}</span>
         <a href="{{ $merchant->publicUrl() }}">{{ $merchant->store_name }}</a>
         @if ($merchant->is_verified)<span class="chip ok">موثّق</span>@endif
     </header>
@@ -16,6 +17,7 @@
         <img class="img" src="{{ asset('storage/'.$product->image_path) }}" width="640" height="480" loading="lazy" alt="{{ $product->name }}">
     @endif
 
+    <div class="pcard">
     <h1>{{ $product->name }}</h1>
 
     @if ($showPrice)
@@ -31,6 +33,7 @@
     @else
         <div class="notice">المنتج ده مش متاح دلوقتي</div>
     @endif
+    </div>
 
     @if ($wa)<a class="btn wa" href="{{ $wa }}" rel="noopener">واتساب</a>@endif
     @if ($merchant->phone)<a class="btn" href="tel:{{ $merchant->phone }}">اتصال</a>@endif

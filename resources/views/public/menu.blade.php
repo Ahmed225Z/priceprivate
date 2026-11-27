@@ -1,4 +1,4 @@
-@php $brand = $merchant->brand_color ?: '#0f766e'; @endphp
+@php $brand = $merchant->brand_color ?: '#029a8e'; @endphp
 @extends('public.layout')
 @section('title', $merchant->store_name)
 @section('content')
