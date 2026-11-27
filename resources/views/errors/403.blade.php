@@ -1,0 +1,5 @@
+@extends('errors.layout')
+@section('title', 'مش مسموحلك')
+@section('code', '403')
+@section('heading', 'مش مسموحلك')
+@section('message', 'مفيش عندك صلاحية تفتح الصفحة دي.')

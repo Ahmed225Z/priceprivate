@@ -1,0 +1,5 @@
+@extends('errors.layout')
+@section('title', 'الصفحة مش موجودة')
+@section('code', '404')
+@section('heading', 'الصفحة مش موجودة')
+@section('message', 'الرابط ده غلط أو الصفحة اتنقلت.')

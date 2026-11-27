@@ -1,0 +1,5 @@
+@extends('errors.layout')
+@section('title', 'الصفحة دي اتشالت')
+@section('code', '410')
+@section('heading', 'الصفحة دي اتشالت')
+@section('message', 'المحتوى ده مش متاح تاني.')

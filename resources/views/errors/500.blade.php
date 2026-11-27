@@ -1,0 +1,5 @@
+@extends('errors.layout')
+@section('title', 'حصلت مشكلة عندنا')
+@section('code', '500')
+@section('heading', 'حصلت مشكلة عندنا')
+@section('message', 'إحنا بنصلحها. جرّب بعد شوية.')
