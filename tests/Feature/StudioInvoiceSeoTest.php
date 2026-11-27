@@ -107,4 +107,29 @@ class StudioInvoiceSeoTest extends TestCase
         $this->get('/p/'.$hidden->public_code)->assertSee('noindex', false);
         $this->get('/')->assertHeader('X-Content-Type-Options', 'nosniff')->assertHeader('X-Frame-Options', 'SAMEORIGIN');
     }
+
+    #[Test]
+    public function creating_a_qr_and_sharing_are_recorded_for_the_funnel(): void
+    {
+        Storage::fake('public');
+        $a = Merchant::factory()->create();
+        $b = Merchant::factory()->create();
+        $mine = Product::factory()->create(['merchant_id' => $a->id, 'category_id' => null]);
+        $theirs = Product::factory()->create(['merchant_id' => $b->id, 'category_id' => null]);
+
+        $this->actingAs($a->user)->get('/dashboard/qr/preview?target=product:'.$mine->id)->assertOk();
+        $this->actingAs($a->user)->get('/dashboard/qr/preview?target=product:'.$mine->id)->assertOk();
+        $this->assertDatabaseCount('share_targets', 1);
+        $this->assertNull(\App\Models\ShareTarget::first()->shared_at);
+
+        $this->actingAs($a->user)->get('/dashboard/qr/preview?target=product:'.$theirs->id)->assertNotFound();
+        $this->assertDatabaseCount('share_targets', 1);
+
+        $this->actingAs($a->user)->postJson('/dashboard/share', ['target' => 'store'])->assertOk();
+        $this->actingAs($a->user)->postJson('/dashboard/share', ['target' => 'product:'.$mine->id])->assertOk();
+        $this->actingAs($a->user)->postJson('/dashboard/share', ['target' => 'product:'.$theirs->id])->assertNotFound();
+        $this->assertDatabaseCount('share_targets', 2);
+        $this->assertSame(2, \App\Models\ShareTarget::whereNotNull('shared_at')->count());
+        $this->assertSame(0, \App\Models\ShareTarget::where('merchant_id', $b->id)->count());
+    }
 }

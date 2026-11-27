@@ -57,6 +57,7 @@ Route::middleware(['auth', 'merchant', 'onboarded'])->prefix('dashboard')->group
     Route::get('/qr', [QrStudioController::class, 'index']);
     Route::get('/qr/preview', [QrStudioController::class, 'preview']);
     Route::post('/qr/default', [QrStudioController::class, 'setDefault']);
+    Route::post('/share', [QrStudioController::class, 'share']);
     Route::post('/products/reorder', [MerchantProductController::class, 'reorder']);
     Route::post('/subscription/upgrade', [PaymentController::class, 'upgrade']);
     Route::post('/print', [PrintController::class, 'generate'])->middleware('throttle:10,60');

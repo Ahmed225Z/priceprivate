@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Merchant;
 
 use App\Http\Controllers\Controller;
+use App\Models\ShareTarget;
 use App\Services\QrOptions;
 use App\Services\QrService;
 use Illuminate\Http\Request;
@@ -52,10 +53,30 @@ class QrStudioController extends Controller
             default => $qr->forMerchant($m, $o),
         };
 
+        ShareTarget::record($m, $kind, $kind === 'store' ? null : (int) $id);
+
         return response(Storage::disk('public')->get($path), 200, [
             'Content-Type' => $o->format === 'svg' ? 'image/svg+xml' : 'image/png',
             'Cache-Control' => 'private, max-age=3600',
         ]);
+    }
+
+    /** The merchant shared a link (Web Share or copy). Target must be theirs. */
+    public function share(Request $request)
+    {
+        $data = $request->validate(['target' => ['required', 'regex:/^(store|category:\d+|product:\d+)$/']]);
+        $m = $request->user()->merchant;
+        [$kind, $id] = array_pad(explode(':', $data['target']), 2, null);
+
+        if ($kind === 'product') {
+            $m->products()->findOrFail($id);
+        } elseif ($kind === 'category') {
+            $m->categories()->findOrFail($id);
+        }
+
+        ShareTarget::record($m, $kind, $kind === 'store' ? null : (int) $id, shared: true);
+
+        return response()->json(['ok' => true]);
     }
 
     /** Changing the target changes where the code goes, never the printed image or link (SRS 8.4). */

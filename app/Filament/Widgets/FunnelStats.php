@@ -29,7 +29,8 @@ class FunnelStats extends StatsOverviewWidget
             Stat::make('1. سجّل', $registered),
             Stat::make('2. أول منتج', Merchant::query()->where('products_count', '>', 0)->count()),
             Stat::make('3. أول كود', ShareTarget::query()->distinct('merchant_id')->count('merchant_id')),
-            Stat::make('4. أول مسح', ScanStat::query()->distinct('merchant_id')->count('merchant_id')),
+            Stat::make('4. شارك', ShareTarget::query()->whereNotNull('shared_at')->distinct('merchant_id')->count('merchant_id')),
+            Stat::make('أول مسح', ScanStat::query()->distinct('merchant_id')->count('merchant_id')),
         ];
     }
 }

@@ -42,4 +42,4 @@ Sign-in is the normal /login flow (EnsureStaff middleware gates /admin); no sepa
 Impersonation: admin only, logged with the real admin as causer, red bar in the public layout with a leave button.
 Deploy: run `php artisan filament:assets` (published assets are not committed). Needs ext-intl.
 Tested on MariaDB with an intl PHP build: 81 pass. On a PHP without ext-intl the 4 admin-panel tests fail (Filament needs intl), the other 77 pass.
-Known gaps: funnel step 3 ("first code") counts share_targets, which the app does not write yet. Impersonate start/leave are POST-only (CSRF, auth, admin only, logged).
+Funnel: step 3 = share_targets row written when a QR is created in the studio; step 4 = shared_at set by POST /dashboard/share (button on the dashboard).

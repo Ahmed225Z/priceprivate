@@ -23,6 +23,7 @@ class ShareTarget extends Model
         'type',
         'target_id',
         'label',
+        'shared_at',
         'created_at',
     ];
 
@@ -30,7 +31,23 @@ class ShareTarget extends Model
     {
         return [
             'created_at' => 'datetime',
+            'shared_at' => 'datetime',
         ];
+    }
+
+    /** One row per merchant + target. A QR created or a link shared both land here. */
+    public static function record(Merchant $m, string $type, ?int $targetId, bool $shared = false): self
+    {
+        $row = static::query()->firstOrCreate(
+            ['merchant_id' => $m->id, 'type' => $type, 'target_id' => $targetId],
+            ['created_at' => now()],
+        );
+
+        if ($shared && ! $row->shared_at) {
+            $row->forceFill(['shared_at' => now()])->save();
+        }
+
+        return $row;
     }
 
     public function merchant(): BelongsTo
