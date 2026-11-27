@@ -14,7 +14,13 @@ use Illuminate\Http\RedirectResponse;
 
 class ProductController extends Controller
 {
-    public function show(Request $request, ProductResolver $resolver, string $code, ?string $slug = null): Response|RedirectResponse
+    /** Longer share link: /{slug}/p/{code}. Route params are passed positionally, so it gets its own signature. */
+    public function showWithSlug(Request $request, ProductResolver $resolver, string $slug, string $code): Response|RedirectResponse
+    {
+        return $this->show($request, $resolver, $code);
+    }
+
+    public function show(Request $request, ProductResolver $resolver, string $code): Response|RedirectResponse
     {
         $r = $resolver->resolve(strtoupper($code));
         $merchant = $r->merchant;

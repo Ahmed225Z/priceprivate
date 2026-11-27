@@ -62,7 +62,7 @@ Route::get('/{slug}', [MenuController::class, 'show'])
     ->middleware(TrackScan::class)
     ->name('menu.show');
 
-Route::get('/{slug}/p/{code}', [ProductController::class, 'show'])
+Route::get('/{slug}/p/{code}', [ProductController::class, 'showWithSlug'])
     ->where('slug', '[a-z0-9][a-z0-9-]{1,38}[a-z0-9]')
     ->where('code', '[A-HJ-NP-Za-hj-np-z2-9]{6}')
     ->middleware(TrackScan::class);

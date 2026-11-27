@@ -4,7 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title')</title>
-    @vite(['resources/css/app.css'])
+    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
+        @vite(['resources/css/app.css'])
+    @endif
 </head>
 <body style="font-family: Tajawal, sans-serif; margin:0; min-height:100vh; display:grid; place-items:center; text-align:center; padding:1rem;">
     <main>
