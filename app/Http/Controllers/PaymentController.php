@@ -57,7 +57,7 @@ class PaymentController extends Controller
     }
 
     /** The real activation. HMAC verified, idempotent on gateway_transaction_id. */
-    public function webhook(Request $request, string $gateway, SubscriptionService $subs)
+    public function webhook(Request $request, string $gateway, SubscriptionService $subs, \App\Services\InvoiceService $invoices)
     {
         $gw = $this->gateway();
         abort_unless($gw->name() === $gateway, 404);
@@ -70,7 +70,7 @@ class PaymentController extends Controller
 
         $payload = $gw->parseWebhook($request);
 
-        DB::transaction(function () use ($payload, $subs) {
+        DB::transaction(function () use ($payload, $subs, $invoices) {
             $payment = Payment::where('gateway_order_id', $payload->orderId)->lockForUpdate()->first();
 
             if (! $payment || $payment->status === Payment::STATUS_PAID) {
@@ -91,6 +91,7 @@ class PaymentController extends Controller
             ])->save();
 
             $subs->activate($payment);
+            $invoices->generate($payment->refresh());
         });
 
         return response('ok', 200);

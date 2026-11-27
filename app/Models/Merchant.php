@@ -115,4 +115,24 @@ class Merchant extends Model
     {
         $this->newQuery()->whereKey($this->getKey())->increment('cache_version');
     }
+
+    /** The link the merchant put in the main QR code (SRS 8.4). Falls back to the store page if the target is gone. */
+    public function defaultTargetUrl(): string
+    {
+        if ($this->default_qr_target_type === 'product' && $this->default_qr_target_id) {
+            $p = $this->products()->find($this->default_qr_target_id);
+            if ($p) {
+                return $p->publicUrl();
+            }
+        }
+
+        if ($this->default_qr_target_type === 'category' && $this->default_qr_target_id) {
+            $c = $this->categories()->find($this->default_qr_target_id);
+            if ($c) {
+                return url('/'.$this->slug.'/'.$c->slug);
+            }
+        }
+
+        return $this->publicUrl();
+    }
 }

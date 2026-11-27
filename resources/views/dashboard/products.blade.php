@@ -6,9 +6,9 @@
 
     <form method="POST" action="{{ url('/dashboard/products/prices') }}">
         @csrf
-        <div class="list">
+        <div class="list" id="sortable">
             @foreach ($products as $p)
-                <div style="display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)">
+                <div data-id="{{ $p->id }}" style="display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)">
                     <span style="flex:1">{{ $p->name }}@if (! $p->is_visible) <span class="chip">مخفي</span>@endif</span>
                     <input name="prices[{{ $p->id }}]" inputmode="decimal" value="{{ $p->price }}" style="width:90px;padding:8px" aria-label="سعر {{ $p->name }}">
                     <a href="{{ url('/qr/'.$p->public_code.'.png') }}" download>QR</a>
@@ -36,4 +36,21 @@
         </select>
         <button class="btn" style="width:100%;border:0">إضافة</button>
     </form>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+    <script>
+        // Drag to reorder (works with touch). Saves the new order in one request.
+        if (window.Sortable) {
+            Sortable.create(document.getElementById('sortable'), {
+                animation: 150,
+                onEnd: function () {
+                    var ids = Array.from(document.querySelectorAll('#sortable [data-id]')).map(function (e) { return e.dataset.id; });
+                    fetch('{{ url('/dashboard/products/reorder') }}', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json'},
+                        body: JSON.stringify({ids: ids})
+                    });
+                }
+            });
+        }
+    </script>
 @endsection

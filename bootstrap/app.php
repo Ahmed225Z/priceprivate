@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'merchant' => \App\Http\Middleware\EnsureMerchant::class,
             'onboarded' => \App\Http\Middleware\EnsureOnboarded::class,
         ]);
+        $middleware->appendToGroup('web', \App\Http\Middleware\SecurityHeaders::class);
         $middleware->redirectGuestsTo('/login');
         // The webhook is verified by HMAC signature instead of a CSRF token.
         $middleware->validateCsrfTokens(except: ['payment/webhook/*']);

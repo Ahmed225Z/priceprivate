@@ -4,12 +4,15 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Merchant\CategoryController;
 use App\Http\Controllers\Merchant\PrintController;
+use App\Http\Controllers\Merchant\QrStudioController;
+use App\Http\Controllers\Merchant\SubscriptionController;
 use App\Http\Controllers\Merchant\ProductController as MerchantProductController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SeoController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\QrImageController;
 use App\Http\Middleware\TrackScan;
@@ -22,6 +25,8 @@ Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/how-it-works', [PageController::class, 'howItWorks']);
 Route::get('/pricing', [PageController::class, 'pricing'])->name('pricing');
 Route::get('/faq', [PageController::class, 'faq']);
+Route::get('/robots.txt', [SeoController::class, 'robots']);
+Route::get('/sitemap.xml', [SeoController::class, 'sitemap']);
 Route::view('/terms', 'marketing.terms');
 Route::view('/privacy', 'marketing.privacy');
 Route::view('/contact', 'marketing.contact');
@@ -47,6 +52,12 @@ Route::middleware(['auth', 'merchant', 'onboarded'])->prefix('dashboard')->group
     Route::post('/products/{product}/toggle', [MerchantProductController::class, 'toggle']);
     Route::delete('/products/{product}', [MerchantProductController::class, 'destroy']);
 
+    Route::get('/subscription', [SubscriptionController::class, 'show']);
+    Route::get('/invoices/{invoice}', [SubscriptionController::class, 'invoice'])->whereNumber('invoice');
+    Route::get('/qr', [QrStudioController::class, 'index']);
+    Route::get('/qr/preview', [QrStudioController::class, 'preview']);
+    Route::post('/qr/default', [QrStudioController::class, 'setDefault']);
+    Route::post('/products/reorder', [MerchantProductController::class, 'reorder']);
     Route::post('/subscription/upgrade', [PaymentController::class, 'upgrade']);
     Route::post('/print', [PrintController::class, 'generate'])->middleware('throttle:10,60');
 

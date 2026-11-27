@@ -14,7 +14,7 @@ class PrintController extends Controller
     public function generate(Request $request, PrintSheetService $svc)
     {
         $data = $request->validate([
-            'template' => ['required', 'in:label_sheet,store_card'],
+            'template' => ['required', 'in:label_sheet,store_card,shelf_talker,table_stand,poster'],
             'product_ids' => ['nullable', 'array', 'max:'.PrintSheetService::MAX_PRODUCTS],
             'product_ids.*' => ['integer'],
         ]);
@@ -29,7 +29,7 @@ class PrintController extends Controller
             ->limit(PrintSheetService::MAX_PRODUCTS)
             ->get();
 
-        if ($template === PrintTemplate::LabelSheet && $products->isEmpty()) {
+        if ($template !== PrintTemplate::StoreCard && $products->isEmpty()) {
             return back()->withErrors(['product_ids' => 'اختار منتج واحد على الأقل.']);
         }
 

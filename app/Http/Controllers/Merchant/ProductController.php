@@ -64,6 +64,14 @@ class ProductController extends Controller
         return back();
     }
 
+    public function reorder(Request $request, \App\Actions\ReorderProducts $action): \Illuminate\Http\JsonResponse
+    {
+        $data = $request->validate(['ids' => ['required', 'array', 'max:1000'], 'ids.*' => ['integer']]);
+        $action->handle($request->user()->merchant, $data['ids']);
+
+        return response()->json(['ok' => true]);
+    }
+
     public function toggle(Request $request, Product $product): RedirectResponse
     {
         $this->authorize('update', $product);

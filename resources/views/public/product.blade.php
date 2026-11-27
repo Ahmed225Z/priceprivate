@@ -5,6 +5,7 @@
 @endphp
 @extends('public.layout')
 @section('title', $product->name.' - '.$merchant->store_name)
+@section('robots', $showPrice ? 'index,follow' : 'noindex')
 @section('content')
     <header class="head">
         <a href="{{ $merchant->publicUrl() }}">{{ $merchant->store_name }}</a>

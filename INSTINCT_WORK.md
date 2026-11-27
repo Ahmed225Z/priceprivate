@@ -28,3 +28,7 @@ php artisan migrate --seed
 php artisan test
 ```
 Set GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET for login, PAYMENT_MOCK_SECRET for the mock gateway.
+
+## Round 8
+Added: invoice PDF (after paid webhook) + subscription page, product drag-sort (SortableJS from CDN, JS not run in a browser here), QR studio (preview, default target), print templates shelf_talker/table_stand/poster, robots.txt, sitemap.xml, noindex on hidden/state pages, security headers. 76 tests pass.
+Still not done: Filament admin (needs PHP intl), real Paymob/Fawry, confirmation email, phone QR scan, real Google login, MySQL, 3G test.

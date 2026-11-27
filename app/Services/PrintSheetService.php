@@ -27,16 +27,22 @@ final class PrintSheetService
     /** @return string absolute path of the generated PDF */
     public function generate(Merchant $m, PrintTemplate $t, Collection $products): string
     {
-        if ($t === PrintTemplate::LabelSheet && ($products->isEmpty() || $products->count() > self::MAX_PRODUCTS)) {
+        if ($t !== PrintTemplate::StoreCard && ($products->isEmpty() || $products->count() > self::MAX_PRODUCTS)) {
             throw new InvalidArgumentException('Label sheet needs 1 to '.self::MAX_PRODUCTS.' products.');
         }
 
         $html = match ($t) {
             PrintTemplate::LabelSheet => $this->labelSheetHtml($m, $products),
             PrintTemplate::StoreCard => $this->storeCardHtml($m),
+            PrintTemplate::ShelfTalker, PrintTemplate::TableStand, PrintTemplate::Poster => $this->singleHtml($m, $t, $products),
         };
 
-        $mpdf = $this->mpdf($t === PrintTemplate::StoreCard ? [90, 50] : 'A4');
+        $mpdf = $this->mpdf(match ($t) {
+            PrintTemplate::StoreCard => [90, 50],
+            PrintTemplate::ShelfTalker => [100, 30],
+            PrintTemplate::TableStand => 'A5',
+            default => 'A4',
+        });
         $mpdf->SetDirectionality('rtl');
         $mpdf->WriteHTML($html);
 
@@ -86,6 +92,42 @@ final class PrintSheetService
             .code { font-size: 5.5pt; color: #029A8E; }
         </style>
         <table>{$cells}</table>
+        HTML;
+    }
+
+    /** One product per page. QR is never below the 2.5 cm print minimum. */
+    private function singleHtml(Merchant $m, PrintTemplate $t, Collection $products): string
+    {
+        [$qrMm, $nameSize, $hintSize] = match ($t) {
+            PrintTemplate::ShelfTalker => [self::MIN_QR_MM, 9, 6],
+            PrintTemplate::TableStand => [80, 22, 12],
+            default => [120, 34, 16],
+        };
+        $store = e($m->store_name);
+        $hint = self::HINT;
+        $pages = [];
+
+        foreach ($products->values() as $p) {
+            $img = \Storage::disk('public')->path($this->qr->forProduct($p, new QrOptions(size: 800)));
+            $name = e($p->name);
+            $pages[] = $t === PrintTemplate::ShelfTalker
+                ? "<table style=\"width:100%\"><tr><td style=\"width:30mm\"><img src=\"{$img}\" style=\"width:{$qrMm}mm;height:{$qrMm}mm\"></td>"
+                    ."<td><div class=\"name\">{$name}</div><div class=\"hint\">{$hint}</div><div class=\"store\">{$store}</div></td></tr></table>"
+                : "<div align=\"center\"><div class=\"store\">{$store}</div><div class=\"name\">{$name}</div>"
+                    ."<img src=\"{$img}\" style=\"width:{$qrMm}mm;height:{$qrMm}mm\"><div class=\"hint\">{$hint}</div></div>";
+        }
+
+        $body = implode('<pagebreak />', $pages);
+
+        return <<<HTML
+        <style>
+            @page { margin: 4mm; }
+            body { font-family: tajawal; direction: rtl; }
+            .name { font-size: {$nameSize}pt; font-weight: bold; color: #243858; }
+            .hint { font-size: {$hintSize}pt; color: #808291; }
+            .store { font-size: {$hintSize}pt; color: #808291; }
+        </style>
+        {$body}
         HTML;
     }
 

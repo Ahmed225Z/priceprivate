@@ -4,7 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title')</title>
-    <meta name="robots" content="index,follow">
+    <meta name="robots" content="@yield('robots', 'index,follow')">
+    @hasSection('description')<meta name="description" content="@yield('description')">@endif
+    <link rel="canonical" href="{{ url()->current() }}">
     <style>
         :root { --brand: {{ $brand ?? '#0f766e' }}; --ink:#111827; --muted:#6b7280; --line:#e5e7eb; --ok:#15803d; --warn:#b45309; }
         *{box-sizing:border-box} body{margin:0;font-family:Tajawal,system-ui,sans-serif;color:var(--ink);background:#fff}
