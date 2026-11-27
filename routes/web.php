@@ -7,7 +7,9 @@ use App\Http\Controllers\Merchant\PrintController;
 use App\Http\Controllers\Merchant\ProductController as MerchantProductController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\QrImageController;
 use App\Http\Middleware\TrackScan;
@@ -16,9 +18,13 @@ use Illuminate\Support\Facades\Route;
 // SRS §5: the order is mandatory. Static routes first, the slug catch-all LAST.
 
 // 1) Marketing (placeholder until P7)
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [PageController::class, 'home'])->name('home');
+Route::get('/how-it-works', [PageController::class, 'howItWorks']);
+Route::get('/pricing', [PageController::class, 'pricing'])->name('pricing');
+Route::get('/faq', [PageController::class, 'faq']);
+Route::view('/terms', 'marketing.terms');
+Route::view('/privacy', 'marketing.privacy');
+Route::view('/contact', 'marketing.contact');
 
 // 2) Auth
 Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -58,6 +64,8 @@ Route::get('/qr/{code}.{ext}', [QrImageController::class, 'show'])
     ->where('code', '[A-HJ-NP-Za-hj-np-z2-9]{6}')
     ->whereIn('ext', ['png', 'svg'])
     ->name('qr.show');
+
+Route::post('/report/{type}/{id}', [ReportController::class, 'store'])->middleware('throttle:3,60')->whereNumber('id');
 
 // 6) Direct product page, before the catch-all
 Route::get('/p/{code}', [ProductController::class, 'show'])

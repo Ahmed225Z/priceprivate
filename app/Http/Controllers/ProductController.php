@@ -7,6 +7,8 @@ namespace App\Http\Controllers;
 use App\Enums\ProductResolutionStatus as S;
 use App\Enums\ShareTargetType;
 use App\Models\Product;
+use App\Models\AdSlot;
+use App\Services\AdService;
 use App\Services\ProductResolver;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -70,6 +72,7 @@ class ProductController extends Controller
             'merchant' => $merchant,
             'showPrice' => $r->shouldShowPrice(),
             'related' => $related,
+            'ad' => app(AdService::class)->slotFor($merchant, AdSlot::PRODUCT_BELOW_CONTACT),
         ]);
     }
 }

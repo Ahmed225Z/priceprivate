@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Enums\ShareTargetType;
+use App\Models\AdSlot;
 use App\Models\Category;
+use App\Services\AdService;
 use App\Models\Merchant;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -67,6 +69,8 @@ class MenuController extends Controller
             'category' => $category,
             'categories' => $merchant->categories()->where('is_visible', true)->orderBy('sort_order')->get(),
             'products' => $products,
+            'adAfterFirst' => app(AdService::class)->slotFor($merchant, AdSlot::LIST_AFTER_FIRST_CATEGORY),
+            'adFooter' => app(AdService::class)->slotFor($merchant, AdSlot::LIST_FOOTER),
         ]);
     }
 }

@@ -34,6 +34,8 @@
     @if ($wa)<a class="btn wa" href="{{ $wa }}" rel="noopener">واتساب</a>@endif
     @if ($merchant->phone)<a class="btn" href="tel:{{ $merchant->phone }}">اتصال</a>@endif
 
+    @include('public.ad', ['slot' => $ad])
+
     <a class="btn outline" href="{{ $merchant->publicUrl() }}">شوف باقي قائمة الأسعار</a>
 
     @if ($related->isNotEmpty())
@@ -44,6 +46,21 @@
             @endforeach
         </div>
     @endif
+
+    <details class="muted" style="margin-top:16px">
+        <summary>بلاغ عن المنتج</summary>
+        <form method="POST" action="{{ url('/report/product/'.$product->id) }}">
+            @csrf
+            <select name="reason" style="width:100%;padding:8px;margin:6px 0">
+                <option value="wrong_price">السعر غلط</option>
+                <option value="prohibited">منتج ممنوع</option>
+                <option value="spam">سبام</option>
+                <option value="copyright">حقوق ملكية</option>
+                <option value="other">حاجة تانية</option>
+            </select>
+            <button class="btn outline" style="width:100%">ابعت البلاغ</button>
+        </form>
+    </details>
 
     <footer class="muted">
         مدعوم بـ «السعر مش ع الخاص»<br>

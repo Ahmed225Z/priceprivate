@@ -10,6 +10,7 @@
             @endforeach
         </div>
     @endif
+    @include('public.ad', ['slot' => $adAfterFirst])
     <div class="list">
         @forelse ($products as $p)
             <a href="{{ $p->publicUrl() }}"><span>{{ $p->name }}</span>
@@ -18,5 +19,6 @@
             <p class="muted">مفيش منتجات هنا لسه.</p>
         @endforelse
     </div>
+    @include('public.ad', ['slot' => $adFooter])
     @if ($merchant->phone)<a class="btn" href="tel:{{ $merchant->phone }}">اتصال</a>@endif
 @endsection
