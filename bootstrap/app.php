@@ -16,6 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'onboarded' => \App\Http\Middleware\EnsureOnboarded::class,
         ]);
         $middleware->redirectGuestsTo('/login');
+        // The webhook is verified by HMAC signature instead of a CSRF token.
+        $middleware->validateCsrfTokens(except: ['payment/webhook/*']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -7,6 +7,7 @@ use App\Http\Controllers\Merchant\PrintController;
 use App\Http\Controllers\Merchant\ProductController as MerchantProductController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\QrImageController;
 use App\Http\Middleware\TrackScan;
@@ -40,12 +41,17 @@ Route::middleware(['auth', 'merchant', 'onboarded'])->prefix('dashboard')->group
     Route::post('/products/{product}/toggle', [MerchantProductController::class, 'toggle']);
     Route::delete('/products/{product}', [MerchantProductController::class, 'destroy']);
 
+    Route::post('/subscription/upgrade', [PaymentController::class, 'upgrade']);
     Route::post('/print', [PrintController::class, 'generate'])->middleware('throttle:10,60');
 
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::post('/categories', [CategoryController::class, 'store']);
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
 });
+
+// 4) Payments
+Route::get('/payment/callback', [PaymentController::class, 'callback']);
+Route::post('/payment/webhook/{gateway}', [PaymentController::class, 'webhook']);
 
 // 5) Public assets
 Route::get('/qr/{code}.{ext}', [QrImageController::class, 'show'])

@@ -47,4 +47,9 @@ return [
         'redirect' => env('FACEBOOK_REDIRECT_URI', '/auth/facebook/callback'),
     ],
 
+    'payments' => [
+        'gateway' => env('PAYMENT_GATEWAY', 'mock'),
+        'mock_secret' => env('PAYMENT_MOCK_SECRET', 'change-me-in-env'),
+    ],
+
 ];

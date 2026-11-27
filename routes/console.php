@@ -8,3 +8,5 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 \Illuminate\Support\Facades\Schedule::command('prints:prune')->hourly();
+
+\Illuminate\Support\Facades\Schedule::call(fn () => app(\App\Services\SubscriptionService::class)->roll())->daily();
