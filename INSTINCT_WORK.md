@@ -1,3 +1,14 @@
+# instinct-work: current summary
+
+Branch only; develop is untouched. 84 tests pass on MariaDB 10.11.9 (1311 assertions). On SQLite without PHP intl the 4 admin tests fail and the rest pass.
+
+**Built:** Google login (Facebook behind a setting), onboarding, categories and products with WebP images, bulk price editor (search, sort), QR studio with live preview, print studio (label sheet, store card, shelf talker, table stand, poster, mPDF), public product/store/category pages, subscriptions and mock payment gateway (HMAC, idempotent, grace, auto-hide), invoice PDF, queued confirmation email, Filament admin at /admin (merchants, reports, payments, subscriptions, ad slots, plans, settings, activity log, impersonation, funnel widgets), marketing site and /styleguide, SEO files and security headers, README with screenshots.
+
+**Unverified or not built:** real Paymob/Fawry, phone scan of a printed QR, real Google login, real MySQL 8 (MariaDB used), 3G/Lighthouse/LCP/size checks, SortableJS CDN in a browser, Livewire editor, full icon set, 320px audit of every page, legal texts, real photos.
+
+The round history below is the detailed log. Some early "Not done" lines in it are outdated; this summary wins.
+
+---
 # instinct-work: status of the build against SRS.md
 
 Built on this branch only. 71 automated tests pass (SQLite in memory): `php artisan test`.
